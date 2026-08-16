@@ -129,6 +129,32 @@ int writeToFile(short int rows, short int cols, int arr[rows][cols], char *fileW
     return 0;
 }
 
+// Writes the current manager state out as a BMP image for the current generation.
+// NOTE: This does NOT populate the manager itself - it relies on writeToFile()
+// having already been called this generation, since that function is what runs
+// golo_set_row() for every row. Always call this AFTER writeToFile() in the loop.
+int writeBmpToFile(char *fileW, golo_manager_t *m) {
+    // BMP is binary data, so open in binary write mode
+    FILE *fpW = fopen(fileW, "wb");
+ 
+    if (fpW == NULL) {
+        fprintf(stderr, "ERROR: opening BMP file.\n");
+        return 1; // 1 for failure
+    }
+ 
+    int ok = golo_write_bmp(m, fpW);
+ 
+    fclose(fpW);
+ 
+    // golo_write_bmp returns 1 on success, 0 on failure
+    if (!ok) {
+        fprintf(stderr, "ERROR: writing BMP data.\n");
+        return 1;
+    }
+ 
+    return 0;
+}
+
 // This is a helper function for nextGen that ensures nothing is out of bounds.
 int _isValid(int r, int c, short int rows, short int cols) {
     return (r >= 0 && r < rows && c >= 0 && c < cols);

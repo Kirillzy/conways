@@ -4,7 +4,7 @@ CC = gcc
 CCFLAGS = -g -std=c99 -Wall -pedantic 
 EXEC = main
 OBJS = main.o gameOfLifeOutput.o functions.o 
-ARGS =20 glider-10x10 0 0
+ARGS =20 glider-10x10 0 0 1
 RM_FILES = main.o gameOfLifeOutput.o functions.o leaksLog *_* valgrind-report.txt
 FINAL_RM = main.o gameOfLifeOutput.o functions.o 
 
@@ -18,7 +18,7 @@ run: ${EXEC}
 	./${EXEC} ${ARGS}
 
 clean:
-	rm -f ${EXEC} ${FINAL_RM} 
+	rm -f ${EXEC} ${RM_FILES} 
 
 leaks: $(EXEC)
 	MallocStackLogging=1 leaks --atExit -- ./$(EXEC)

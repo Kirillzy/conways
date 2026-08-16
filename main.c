@@ -17,6 +17,9 @@ int main(int argc, char *argv[]) {
     int wrapVert = 0;
     // Optional argv[4]
     int wrapHorz = 0;
+    // Optional argv[5]: also write a .bmp image per generation, in addition to text
+    int makeBmp = 0;
+
     
     // Command Arguements Handling where we handles arguements 1-4
 
@@ -181,7 +184,7 @@ int main(int argc, char *argv[]) {
         }
 
         // --- Fourth Arg ---
-        if (argc == 5) {
+        if (argc >= 5) {
 
             if (strcmp(argv[4], "0") == 0) {
                 wrapHorz = 0;
@@ -197,6 +200,26 @@ int main(int argc, char *argv[]) {
                 exit(EXIT_FAILURE);
             }
         }
+
+        // --- Fifth Arg (optional, not part of the required spec) ---
+        // Turns on additional .bmp image output per generation, alongside the required text output.
+
+        if (argc == 6) {
+            if (strcmp(argv[5], "0") == 0) {
+                makeBmp = 0;
+                fprintf(stdout, "makeBmp is now 0\n");
+            }
+            else if (strcmp(argv[5], "1") == 0) {
+                makeBmp = 1;
+                fprintf(stdout, "makeBmp is now 1\n");
+            }
+            else {
+                free(seed);
+                fprintf(stderr, "ERROR: arg 5 was provided, but it was not a 1 or 0.\n");
+                exit(EXIT_FAILURE);
+            }
+        }
+
     }
     fprintf(stdout, "-----------------------------------------------------------------\n");
 
@@ -236,6 +259,36 @@ int main(int argc, char *argv[]) {
             golo_free(manager);
             exit(EXIT_FAILURE);
         }
+
+        // Optionally also write this generation out as a .bmp image.
+        // Relies on writeToFile() above having already populated the manager for this generation.
+        if (makeBmp) {
+            // "seed_g" + ".bmp" + null terminator
+            size_t bmpFileLength = strlen(gensFile) + strlen(".bmp") + 1;
+            char *bmpFile = (char *)malloc(sizeof(char) * bmpFileLength);
+ 
+            if (bmpFile == NULL) {
+                free(gensFile);
+                free(seed);
+                golo_free(manager);
+                fprintf(stderr, "ERROR: Malloc failed for bmpFile.\n");
+                exit(EXIT_FAILURE);
+            }
+ 
+            snprintf(bmpFile, bmpFileLength, "%s.bmp", gensFile);
+ 
+            int toBmp = writeBmpToFile(bmpFile, manager);
+            free(bmpFile);
+ 
+            // if writeBmpToFile failed, we free everything and exit.
+            if (toBmp == 1) {
+                free(gensFile);
+                free(seed);
+                golo_free(manager);
+                exit(EXIT_FAILURE);
+            }
+        }
+
 
         // This is because it would generate a next below that we dont need
         if (gens == i) {

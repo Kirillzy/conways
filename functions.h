@@ -49,6 +49,24 @@ Returns 1 for any errors or failures, 0 for success.
 */
 int writeToFile(short int rows, short int cols, int arr[rows][cols], char *fileW, golo_manager_t *m);
 
+// Writes the current world state out as a BMP image, for visualization.
+// -- fileW is the file to create for writing, in binary mode
+// -- m is the manager, which must ALREADY be populated for the current generation
+/*
+Pass in a char *file to create for writing, and the golo_manager_t *m.
+ 
+IMPORTANT: this function does not call golo_set_row() itself - it assumes the
+manager already holds the current generation's data. In practice, this means it
+must always be called AFTER writeToFile() within the same generation's iteration,
+since writeToFile() is what populates the manager row by row.
+ 
+Opens fileW in binary write mode, calls golo_write_bmp(m, fpW) to render the image,
+then closes the file.
+ 
+Returns 1 for any errors or failures, 0 for success.
+*/
+int writeBmpToFile(char *fileW, golo_manager_t *m);
+
 // Goes into the next generation of our world
 // I will put my 2d array here, the function will create another 2d array with same rows/cols.
 // Then it will use the array I passed in as a "read" tool and the new array called next as the new one
