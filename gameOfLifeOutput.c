@@ -98,6 +98,12 @@ int golo_write_bmp(golo_manager_t *m, FILE * fh) {
 	int padded_width = round4(pixel_width * 3);
 	int total_size = padded_width * pixel_height;
 
+	// LOCAL FIX: header[0] is supposed to hold the total BMP file size
+	// (tag + header + pixel data), but was hardcoded to 0x3a. So patched it on my end
+	// Now total_size is actually known.
+	header[0] = (int)sizeof(tag) + (int)sizeof(header) + total_size;
+
+
 	// Allocate a big 'ol buffer to hold all of the pixel data
 	char *pixel_data = (char *)calloc(total_size, sizeof(char));
 	if(!pixel_data) { return 0; }
