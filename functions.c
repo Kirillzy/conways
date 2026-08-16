@@ -53,8 +53,6 @@ int parse0thGen(short int rows, short int cols, int arr[rows][cols], char *seed)
     }
     fclose(fpRead);
 
-    // Testing for correct 0th gen
-    fprintf(stdout, "0th Gen Test.\n");
     for (int i = 0; i < rows; i++) {
         for (int k = 0; k < cols; k++) { 
             printf("%c", arr[i][k]);
@@ -92,6 +90,9 @@ char *fileNameGetter(char *seed, short int gen) {
 }
 
 // Uses the 2d array to update the manager by each row, then opens a write file to use manager to write into.
+// NOTE: Internally, our world array stores the ASCII chars '0' (dead) and '1' (alive).
+// golo_set_row(), however, expects a boolean convention: any nonzero byte counts as alive,
+// 0 means dead. This function is the single boundary where that translation happens.
 int writeToFile(short int rows, short int cols, int arr[rows][cols], char *fileW, golo_manager_t *m) {
     // Create a temporary array of characters to hold exactly one row
     char temp_row[cols];

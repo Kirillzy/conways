@@ -15,7 +15,7 @@ ${EXEC}: ${OBJS}
 	${CC} ${CCFLAGS} -c $<
 
 run: ${EXEC}
-	./${EXEC}
+	./${EXEC} ${ARGS}
 
 clean:
 	rm -f ${EXEC} ${FINAL_RM} 

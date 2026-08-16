@@ -54,9 +54,6 @@ int main(int argc, char *argv[]) {
             exit(EXIT_FAILURE);  
         }
 
-        // Testing code for ourselves
-        fprintf(stdout, "If we made it here, you got arg1 correct\n");
-
         // --- Second Arg ---
             // Parse through the Seed File Format correctly, 
             // First line has the 2 integers in the file
@@ -140,13 +137,9 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "ERROR: Total number of periods and zeros in the file is LESS than rows*cols.\n");
             exit(EXIT_FAILURE);
         }
-        fprintf(stdout, "Total '.' and '0' is successfully >= rows*cols.\n");
 
         // Close this since we confirmed our seed configuration file is error free
         fclose(fpRead);
-        // Testing code for ourselves
-        fprintf(stdout, "If we made it here, you got arg2 correct\n");
-        
 
     } 
     // Else we dont have the 2 required arguements, error out
@@ -206,8 +199,6 @@ int main(int argc, char *argv[]) {
         }
     }
     fprintf(stdout, "-----------------------------------------------------------------\n");
-    fprintf(stdout, "Successfully parsed the command line arguements and its errors\n");
-    fprintf(stdout, "-----------------------------------------------------------------\n");
 
     // Next I will store my world with a 2d array
     int world[rows][cols];
@@ -252,8 +243,6 @@ int main(int argc, char *argv[]) {
             break;
         }
 
-        // Now we do the next generation
-        printf("next...");
         nextGen(rows, cols, world, wrapVert, wrapHorz);
 
         free(gensFile);
