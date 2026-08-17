@@ -60,7 +60,7 @@ Seed files are plain text: two whitespace-separated integers (`rows cols`) follo
 Requires `gcc` and `make` (developed and tested on macOS/Linux).
 
 ```
-git clone https://github.com/Kirillzy/conways
+git clone https://github.com/Kirillzy/Conways
 cd <this-repo>
 make
 ```
